@@ -9,5 +9,6 @@ stackedit_v4
 chrome-app/*.zip
 /test/unit/coverage/
 server/app
+editor/app
 .wrangler
 wrangler.toml
