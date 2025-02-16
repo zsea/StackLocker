@@ -1,0 +1,56 @@
+export default [{
+}, {
+  method: 'bold',
+  title: '加粗',
+  icon: 'format-bold',
+}, {
+  method: 'italic',
+  title: '斜体',
+  icon: 'format-italic',
+}, {
+  method: 'heading',
+  title: '标题',
+  icon: 'format-size',
+}, {
+  method: 'strikethrough',
+  title: '删除线',
+  icon: 'format-strikethrough',
+// }, {
+}, {
+  method: 'ulist',
+  title: '无序列表',
+  icon: 'format-list-bulleted',
+}, {
+  method: 'olist',
+  title: '有序列表',
+  icon: 'format-list-numbers',
+}, {
+  method: 'clist',
+  title: '可选列表',
+  icon: 'format-list-checks',
+// }, {
+}, {
+  method: 'quote',
+  title: '块引用',
+  icon: 'format-quote-close',
+}, {
+  method: 'code',
+  title: '代码',
+  icon: 'code-tags',
+}, {
+  method: 'table',
+  title: '表格',
+  icon: 'table',
+}, {
+  method: 'link',
+  title: '链接',
+  icon: 'link-variant',
+}, {
+  method: 'image',
+  title: '图片',
+  icon: 'file-image',
+}, /* {
+  method: 'chatgpt',
+  title: 'ChatGPT',
+  icon: 'chat-gpt',
+} */];

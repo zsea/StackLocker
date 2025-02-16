@@ -1,0 +1,21 @@
+{
+  "name": "stacklocker-server",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "wrangler pages dev",
+    "deploy": "wrangler pages deploy ./"
+  },
+  "keywords": [
+    "stacklocker"
+  ],
+  "author": "zsea",
+  "license": "ISC",
+  "devDependencies": {
+    "wrangler": "^3.109.1"
+  },
+  "volta": {
+    "node": "20.11.0"
+  }
+}

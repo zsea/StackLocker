@@ -1,0 +1,28 @@
+{
+  "name": "StackEdit中文版",
+  "description": "支持Gitee仓库/粘贴图片自动上传的浏览器内 Markdown 编辑器",
+  "version": "5.15.17",
+  "manifest_version": 2,
+  "container" : "GITEE",
+  "api_console_project_id" : "241271498917",
+  "icons": {
+    "16": "icon-16.png",
+    "32": "icon-32.png",
+    "64": "icon-64.png",
+    "128": "icon-128.png",
+    "256": "icon-256.png",
+    "512": "icon-512.png"
+  },
+  "app": {
+    "urls": [
+      "https://stackedit.cn/"
+    ],
+    "launch": {
+      "web_url": "https://stackedit.cn/app"
+    }
+  },
+  "offline_enabled": true,
+  "permissions": [
+    "unlimitedStorage"
+  ]
+}
