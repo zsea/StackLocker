@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "wrangler pages dev",
-    "deploy": "wrangler pages deploy ./"
+    "deploy": "wrangler pages deploy ./ --branch production"
   },
   "keywords": [
     "stacklocker"
