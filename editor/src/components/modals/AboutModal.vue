@@ -11,7 +11,7 @@
       <h3>常见问题解答</h3>
       <div class="faq" v-html="faq"></div>
       <div class="modal__info">
-        如需商业支持或定制开发，请 <a href="mailto:">联系我们</a>.
+        如需商业支持或定制开发，请 <a href="mailto:" @click.prevent="contactUs()">联系我们</a>。
       </div>
       Licensed under an
       <a target="_blank" href="http://www.apache.org/licenses/LICENSE-2.0">Apache License</a><br>
@@ -28,6 +28,7 @@ import { mapGetters } from 'vuex';
 import ModalInner from './common/ModalInner';
 import markdownConversionSvc from '../../services/markdownConversionSvc';
 import faq from '../../data/faq.md';
+import store from '../../store';
 
 export default {
   components: {
@@ -42,6 +43,11 @@ export default {
     ]),
     faq() {
       return markdownConversionSvc.defaultConverter.render(faq);
+    },
+  },
+  methods: {
+    contactUs() {
+      store.dispatch('modal/open', { type: 'contactUs' });
     },
   },
 };

@@ -1,7 +1,7 @@
 <template>
   <modal-inner aria-label="插入图像">
     <div class="modal__content">
-      <p>请为您的图像提供<b> url </b>。<span v-if="uploading">(图片上传中...)</span></p>
+      <p>请为您的图像提供<b> URL </b>。<span v-if="uploading">(图片上传中...)</span></p>
       <form-entry label="URL" error="url">
         <input slot="field" class="textfield" type="text" v-model.trim="url" @keydown.enter="resolve">
       </form-entry>
@@ -14,39 +14,7 @@
     </div>
     <div>
       <hr />
-      <p>设置图床后可在<b>编辑区</b>中<b>粘贴/拖拽</b>图片自动上传</p>
-      
-      <menu-entry @click.native="addWorkspaceImgPath">
-        <icon-provider slot="icon" :provider-id="currentWorkspace.providerId"></icon-provider>
-        <span>设置当前文档空间图片路径</span>
-      </menu-entry>
-      <menu-entry @click.native="addSmmsAccount">
-        <icon-provider slot="icon" provider-id="smms"></icon-provider>
-        <span>设置SM.MS图床账号</span>
-      </menu-entry>
-      <menu-entry @click.native="addCustomAccount">
-        <icon-provider slot="icon" provider-id="custom"></icon-provider>
-        <span>设置自定义图床账号</span>
-      </menu-entry>
-      <menu-entry @click.native="addGiteaImgStorage">
-        <icon-provider slot="icon" provider-id="gitea"></icon-provider>
-        <span>设置Gitea图床仓库
-          <button class="menu-item__button button" @click.stop="setDefault('gitea')" v-title="'设置默认'">
-            <icon-check-circle v-if="platform === 'gitea'" slot="icon"></icon-check-circle>
-            <icon-check-circle-un v-if="platform !== 'gitea'" slot="icon"></icon-check-circle-un>
-          </button>
-        </span>
-      </menu-entry>
-      <menu-entry @click.native="addGithubImgStorage">
-        <icon-provider slot="icon" provider-id="github"></icon-provider>
-        <span>设置GitHub图床仓库
-          <button class="menu-item__button button" @click.stop="setDefault('github')" v-title="'设置默认'">
-            <icon-check-circle v-if="platform === 'github'" slot="icon"></icon-check-circle>
-            <icon-check-circle-un v-if="platform !== 'github'" slot="icon"></icon-check-circle-un>
-          </button>
-        </span>
-      </menu-entry>
-    
+      <p>设置图床后可在<b>编辑区</b>中<b>粘贴/拖拽</b>图片自动上传。</p>
     </div>
   </modal-inner>
 </template>

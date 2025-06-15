@@ -66,6 +66,8 @@ import Copy from './Copy';
 import Ellipsis from './Ellipsis';
 import Share from './Share';
 import ChatGpt from './ChatGpt';
+import PictureBed from './PictureBed';
+import TwoFactor from './TwoFactor';
 
 Vue.component('iconProvider', Provider);
 Vue.component('iconFormatBold', FormatBold);
@@ -134,3 +136,5 @@ Vue.component('iconCopy', Copy);
 Vue.component('iconEllipsis', Ellipsis);
 Vue.component('iconShare', Share);
 Vue.component('iconChatGpt', ChatGpt);
+Vue.component('iconPictureBed', PictureBed);
+Vue.component('iconTwoFactor', TwoFactor);

@@ -257,7 +257,6 @@ function cledit(contentElt, scrollEltOpt, isMarkdown = false) {
     }
   };
   window.addEventListener('resize', windowResizeListener);
-
   // Provokes selection changes and does not fire mouseup event on Chrome/OSX
   contentElt.addEventListener(
     'contextmenu',
@@ -383,7 +382,21 @@ function cledit(contentElt, scrollEltOpt, isMarkdown = false) {
   contentElt.addEventListener('blur', () => {
     editor.$trigger('blur');
     const file = store.getters['content/current'];
-    axios.patch('/api/disk/content', { id: file.id, text: file.text });
+    if (file.changed) {
+      axios.patch('/api/disk/content', { id: file.id, text: file.text }).then((res) => {
+        if (res.status !== 200) return '网络错误。';
+        if (!res.data.success) return res.data.message || '服务器繁忙。';
+        return null;
+      }).then((err) => {
+        if (err) {
+          store.dispatch('notification/error', `文件保存失败：${err}`);
+        } else {
+          store.commit('content/setChanged', file.id);
+          window.removeEventListener('beforeunload', window.beforeunload_fun);
+        }
+      });
+    }
+    // window.addEventListener("beforeunload")
   });
 
   function addKeystroke(keystroke) {

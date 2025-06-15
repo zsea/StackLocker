@@ -1,8 +1,10 @@
 import axios from 'axios/dist/axios';
+import qrcode from 'qrcode';
 import store from '../store';
 import tools from './tools';
 import localStorageSvc from './localStorageSvc';
 import localDbSvc from './localDbSvc';
+import imageSvc from './imageSvc';
 
 const cloudSvc = {
   async init() {
@@ -287,6 +289,126 @@ const cloudSvc = {
     } catch (e) {
       // 取消
     }
+  },
+  async setPictureBed() {
+    const conf = await new Promise((resolve) => {
+      store.dispatch('modal/open', {
+        type: 'pictureBed',
+        callback: (o) => {
+          if (!o) {
+            resolve();
+            return;
+          }
+          resolve(o);
+        },
+      });
+    });
+    if (!conf) return;
+    imageSvc.setDefault('github');
+    imageSvc.savePlatform(conf.platform, conf.settings);
+  },
+  async getApiKey() {
+    const response = await axios.get('/api/conf/api_key');
+    if (response && response.status === 200 && response.data.success) {
+      return {
+        success: true,
+        token: response.data.data.token,
+      };
+    }
+    let msg;
+    if (!response || response.status !== 200) {
+      msg = '网络错误。';
+    } else {
+      msg = msg || response.data.message || '系统错误。';
+    }
+    return {
+      success: false,
+      message: msg,
+    };
+  },
+  async setApiKey(token) {
+    const response = await axios.post('/api/conf/api_key', {
+      token,
+    });
+    if (response && response.status === 200 && response.data.success) {
+      return {
+        success: true,
+      };
+    }
+    let msg;
+    if (!response || response.status !== 200) {
+      msg = '网络错误。';
+    } else {
+      msg = msg || response.data.message || '系统错误。';
+    }
+    store.dispatch('modal/open', { type: 'messageBox', message: msg });
+    return {
+      success: false,
+      message: msg,
+    };
+  },
+  async getTwoFactor() {
+    const response = await axios.get('/api/conf/2fa');
+    if (response && response.status === 200 && response.data.success) {
+      return new Promise((resolve) => {
+        qrcode.toDataURL(response.data.data.uri, (err, qr) => {
+          resolve({
+            success: true,
+            data: {
+              qr,
+              secret: response.data.data.secret,
+              uri: response.data.data.uri,
+            },
+          });
+        });
+      });
+    }
+    let msg;
+    if (!response || response.status !== 200) {
+      msg = '网络错误。';
+    } else {
+      msg = msg || response.data.message || '系统错误。';
+    }
+    return {
+      success: false,
+      message: msg,
+    };
+  },
+  async setTwoFactor(code, secret) {
+    const response = await axios.post('/api/conf/2fa', {
+      code,
+      secret,
+    });
+    if (response && response.status === 200 && response.data.success) {
+      return {
+        success: true,
+      };
+    }
+    let msg;
+    if (!response || response.status !== 200) {
+      msg = '网络错误。';
+    } else {
+      msg = msg || response.data.message || '系统错误。';
+    }
+    store.dispatch('modal/open', { type: 'messageBox', message: msg });
+    return {
+      success: false,
+      message: msg,
+    };
+  },
+  async verifyTwoFactor(code) {
+    const response = await axios.patch('/api/account/login', {
+      code,
+    }, {
+      validateStatus: () => true,
+    });
+    if (response && response.status === 200) {
+      return response.data;
+    }
+    return {
+      success: false,
+      message: '网络错误',
+    };
   },
 };
 

@@ -38,6 +38,9 @@ function getLogin() {
       // 24小时过期
       return false;
     }
+    if (jwt.payload.use2FA) {
+      if (!jwt.payload.verify2FA) return false;
+    }
     return true;
   });
   return !!isToken;

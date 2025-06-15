@@ -37,10 +37,32 @@ module.mutations = {
     state.loading = value;
   },
   setContent: ({ itemsById }, content) => {
-    Vue.set(itemsById, `${content.id}/content`, Object.assign(empty(), content));
+    const nContent = Object.assign(empty(), content);
+    const oContent = itemsById[`${content.id}/content`];
+    if (oContent) {
+      if (oContent.text !== nContent.text) {
+        nContent.changed = true;
+        if (!window.beforeunload_fun) {
+          window.beforeunload_fun = (event) => {
+            event.preventDefault();
+            event.returnValue = '内容未保存完成。';
+            return '内容未保存完成。';
+          };
+        }
+        window.addEventListener('beforeunload', window.beforeunload_fun);
+      }
+    }
+    // console.log('修改内容', itemsById[`${content.id}/content`], nContent);
+    Vue.set(itemsById, `${content.id}/content`, nContent);
   },
   deleteContent({ itemsById }, id) {
     Vue.delete(itemsById, id);
+  },
+  setChanged({ itemsById }, id) {
+    const oContent = itemsById[`${id}/content`];
+    if (oContent) {
+      oContent.changed = false;
+    }
   },
 };
 
@@ -77,7 +99,8 @@ module.actions = {
     // console.log('内容变化，请同步到数据库');
     const { id } = getters.current;
     if (id && !state.revisionContent) {
-      // console.log(value);
+      // console.log('内容变化', value);
+      // console.log('当前内容', getters.current);
       // axios.patch('/api/disk/content', { id: value.id, text: value.text });
       // sessionStorage.setItem(`stacklocker:cached:${value.id}`, JSON.stringify(value));
       commit('setContent', value);

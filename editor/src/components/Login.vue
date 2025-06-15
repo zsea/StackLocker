@@ -1,26 +1,32 @@
 <template>
   <div class="login-root">
     <div class="login-box">
-      <h1 class="form-title">登录</h1>
+      <h1 class="form-title">StackLocker</h1>
       <div class="input-fields-container">
-        <div class="input-field" :class="{ 'error': !!userError }">
+        <div class="input-field" :class="{ 'error': !!userError }" v-if="!show2FA">
           <i class="iconfont icon-user input-icon"></i>
           <input type="text" id="username" name="username" placeholder="账号" required autocomplete="off"
-            @change="validate('username')">
+            @change="validate('username')" v-model="username">
         </div>
-        <div class="input-field" :class="{ 'error': !!passwordError }">
+        <div class="input-field" :class="{ 'error': !!passwordError }" v-if="!show2FA">
           <i class="iconfont icon-lock input-icon"></i>
           <input :type="inputType" id="password" name="password" placeholder="密码" required autocomplete="off"
-            @change="validate('password')">
+            @change="validate('password')" v-model="password">
           <i class="iconfont show-hide-password"
             :class="{ 'icon-eyeclose-fill': !showPassword, 'icon-eye-fill': showPassword }"
             @click="togglePassword()"></i>
+        </div>
+        <div class="input-field" :class="{ 'error': !!twoFAError }" v-if="show2FA">
+          <i class="iconfont icon-lock input-icon"></i>
+          <input type="text" id="twofactor" name="twofactor" placeholder="验证码" required autocomplete="off"
+            @change="validate('twofactor')" v-model="code">
         </div>
         <div class="error-summary">
           {{ errorSummary }}
         </div>
         <div>
-          <button class="login-button" @click="login()">登录</button>
+          <button class="login-button" @click="login()" v-if="!show2FA">登录</button>
+          <button class="login-button" @click="verify()" v-if="show2FA">确定</button>
         </div>
       </div>
     </div>
@@ -37,6 +43,11 @@ export default ({
     userError: undefined,
     passwordError: undefined,
     serverMessage: undefined,
+    show2FA: false,
+    twoFAError: undefined,
+    code: '',
+    username: '',
+    password: '',
   }),
   computed: {
     // 计算属性来决定 input 类型
@@ -44,7 +55,7 @@ export default ({
       return this.showPassword ? 'text' : 'password';
     },
     haveError() {
-      return !!this.userError || !!this.passwordError;
+      return !!this.userError || !!this.passwordError || !!this.twoFAError;
     },
     errorSummary() {
       const msg = [];
@@ -53,6 +64,9 @@ export default ({
       }
       if (this.passwordError) {
         msg.push(this.passwordError);
+      }
+      if (this.twoFAError) {
+        msg.push(this.twoFAError);
       }
       if (msg.length === 0 && this.serverMessage && this.serverMessage.length) {
         msg.push(this.serverMessage);
@@ -66,10 +80,12 @@ export default ({
     },
     validate(field) {
       const fields = field ? [field] : ['username', 'password'];
+      const labels = { username: '账号', password: '密码', twofactor: '验证码' };
+      const errors = { username: 'userError', password: 'passwordError', twofactor: 'twoFAError' };
       fields.forEach((id) => {
         const v = document.getElementById(id).value;
-        const fieldLabel = id === 'username' ? '账号' : '密码';
-        const errorName = id === 'username' ? 'userError' : 'passwordError';
+        const fieldLabel = labels[id];
+        const errorName = errors[id];
         if (!v || !v.length) {
           this[errorName] = `${fieldLabel}不能为空`;
         } else {
@@ -86,9 +102,27 @@ export default ({
       const password = document.getElementById('password').value;
       cloudSvc.login(username, password).then((ret) => {
         if (ret && ret.success) {
-          store.commit('login/changeLogin', true);
+          if (ret.use2FA) {
+            this.show2FA = true;
+            this.userError = undefined;
+            this.passwordError = undefined;
+          } else {
+            store.commit('login/changeLogin', true);
+          }
         } else {
           this.serverMessage = ret.message || '登录失败';
+        }
+      });
+    },
+    verify() {
+      if (!this.validate('twofactor')) {
+        return;
+      }
+      cloudSvc.verifyTwoFactor(this.code).then((ret) => {
+        if (ret && ret.success) {
+          store.commit('login/changeLogin', true);
+        } else {
+          this.serverMessage = ret.message || '验证失败';
         }
       });
     },

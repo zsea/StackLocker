@@ -5,16 +5,27 @@
       <div>修改密码</div>
       <span>修改当前账号登录密码。</span>
     </menu-entry>
+    <menu-entry @click.native="twofactor">
+      <icon-two-factor slot="icon"></icon-two-factor>
+      <div>二步认证</div>
+      <span>设置登录时的两步认证信息。</span>
+    </menu-entry>
     <menu-entry @click.native="exitLogin">
       <icon-login slot="icon"></icon-login>
       <div>退出登录</div>
       <span>删除登录状态。</span>
     </menu-entry>
     <hr>
-    <menu-entry @click.native="setPanel('toc')">
-      <icon-toc slot="icon"></icon-toc>
-      目录
+    <menu-entry @click.native="setPictureBed">
+      <icon-picture-bed slot="icon"></icon-picture-bed>
+      图床设置
     </menu-entry>
+    <menu-entry @click.native="setApiKey">
+      <icon-key slot="icon"></icon-key>
+      <div>访问密钥</div>
+      <span>第三方应用调用接口时使用的密钥。</span>
+    </menu-entry>
+    <hr>
     <menu-entry @click.native="setPanel('help')">
       <icon-help-circle slot="icon"></icon-help-circle>
       Markdown 帮助
@@ -160,6 +171,15 @@ export default {
     },
     async exitLogin() {
       return cloudSvc.exitLogin();
+    },
+    async setPictureBed() {
+      return cloudSvc.setPictureBed();
+    },
+    async setApiKey() {
+      store.dispatch('modal/open', 'key');
+    },
+    async twofactor() {
+      store.dispatch('modal/open', 'twoFactor');
     },
   },
 };

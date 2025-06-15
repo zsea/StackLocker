@@ -43,7 +43,10 @@ import SponsorModal from './modals/SponsorModal';
 import CommitMessageModal from './modals/CommitMessageModal';
 import WorkspaceImgPathModal from './modals/WorkspaceImgPathModal';
 import ChatGptModal from './modals/ChatGptModal';
-
+import PictureBedModal from './modals/PictureBedModal';
+import KeyModal from './modals/KeyModal';
+import TwoFactorModal from './modals/TwoFactorModal';
+import ContactUsModal from './modals/ContactUsModal';
 // Providers
 import GooglePhotoModal from './modals/providers/GooglePhotoModal';
 import GoogleDriveAccountModal from './modals/providers/GoogleDriveAccountModal';
@@ -118,6 +121,10 @@ export default {
     CommitMessageModal,
     WorkspaceImgPathModal,
     ChatGptModal,
+    PictureBedModal,
+    KeyModal,
+    TwoFactorModal,
+    ContactUsModal,
     // Providers
     GooglePhotoModal,
     GoogleDriveAccountModal,

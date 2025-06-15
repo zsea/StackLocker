@@ -31,26 +31,26 @@ OfflinePluginRuntime.install({
   },
 });
 
-if (localStorage.updated) {
-  store.dispatch('notification/info', 'StackEdit中文版刚刚更新了！');
-  setTimeout(() => localStorage.removeItem('updated'), 3000);
-}
+// if (localStorage.updated) {
+//   store.dispatch('notification/info', 'StackEdit中文版刚刚更新了！');
+//   setTimeout(() => localStorage.removeItem('updated'), 3000);
+// }
 
-if (!localStorage.installPrompted) {
-  window.addEventListener('beforeinstallprompt', async (promptEvent) => {
-    // Prevent Chrome 67 and earlier from automatically showing the prompt
-    promptEvent.preventDefault();
+// if (!localStorage.installPrompted) {
+//   window.addEventListener('beforeinstallprompt', async (promptEvent) => {
+//     // Prevent Chrome 67 and earlier from automatically showing the prompt
+//     promptEvent.preventDefault();
 
-    try {
-      await store.dispatch('notification/confirm', '将StackEdit中文版添加到您的主屏幕上？');
-      promptEvent.prompt();
-      await promptEvent.userChoice;
-    } catch (err) {
-      // Cancel
-    }
-    localStorage.installPrompted = true;
-  });
-}
+//     try {
+//       await store.dispatch('notification/confirm', '将StackEdit中文版添加到您的主屏幕上？');
+//       promptEvent.prompt();
+//       await promptEvent.userChoice;
+//     } catch (err) {
+//       // Cancel
+//     }
+//     localStorage.installPrompted = true;
+//   });
+// }
 
 Vue.config.productionTip = false;
 
